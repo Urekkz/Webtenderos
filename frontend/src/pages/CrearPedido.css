@@ -1,0 +1,53 @@
+/* src/pages/CrearPedido.css */
+
+.crear-pedido-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.productos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.productos-table th,
+.productos-table td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.productos-table th {
+    background-color: #f4f4f9;
+}
+
+.cantidad-input {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Reutilizamos el estilo del botón de registro */
+.submit-btn {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    background-color: #1a237e;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #283593;
+}
