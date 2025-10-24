@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import './Registro.css'; // Reutilizamos el estilo del formulario de registro
 
+
+
 const GestionProductos = () => {
     const [productos, setProductos] = useState([]);
     const [formData, setFormData] = useState({ nombre: '', precio: '' });

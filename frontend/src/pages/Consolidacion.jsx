@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import './CrearPedido.css'; // Reutilizamos estilos
+import './styles.css'; // Estilos globales
+
+
 
 const Consolidacion = () => {
     const [productos, setProductos] = useState([]);

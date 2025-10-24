@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import './PlataformaCentral.css';
 
+
+
 const PlataformaCentral = () => {
     const [pedidos, setPedidos] = useState([]);
     const [loading, setLoading] = useState(true);

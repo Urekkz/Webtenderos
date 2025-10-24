@@ -24,7 +24,7 @@ const MisPedidos = () => {
 
     useEffect(() => {
         fetchMisPedidos();
-    }, [tenderoId]); // Se ejecutará si tenderoId cambia
+    }, [tenderoId]);
 
     const handleMarcarRecibido = async (pedidoId) => {
         if (!confirm('¿Estás seguro de que quieres marcar este pedido como recibido?')) return;
@@ -38,7 +38,7 @@ const MisPedidos = () => {
             if (!response.ok) throw new Error('No se pudo actualizar el estado');
             
             alert('¡Pedido marcado como recibido!');
-            fetchMisPedidos(); // Recargamos la lista
+            fetchMisPedidos();
         } catch (error) {
             alert(`Error: ${error.message}`);
         }
@@ -54,17 +54,40 @@ const MisPedidos = () => {
                     <div key={pedido.id} className={`pedido-card estado-${pedido.estado}`}>
                         <div className="pedido-header">
                             <h3>Pedido #{pedido.id}</h3>
-                            <span className="pedido-estado">{pedido.estado.replace('_', ' ')}</span>
+
+                            {/* --- Etiquetas visuales de estado --- */}
+                            {pedido.estado === 'pendiente' && (
+                                <span className="badge bg-warning text-dark">Pendiente</span>
+                            )}
+                            {pedido.estado === 'en_consolidacion' && (
+                                <span className="badge bg-info text-dark">En consolidación</span>
+                            )}
+                            {pedido.estado === 'despachado' && (
+                                <span className="badge bg-primary">En despacho</span>
+                            )}
+                            {pedido.estado === 'recibido' && (
+                                <span className="badge bg-success">Recibido</span>
+                            )}
+                            {pedido.estado === 'vencido' && (
+                                <span className="badge bg-danger parpadeo">⚠️ Vencido (72 h)</span>
+                            )}
                         </div>
+
                         <div className="pedido-body">
                             <p><strong>Fecha:</strong> {new Date(pedido.fecha).toLocaleString('es-CO')}</p>
                             <ul>
-                                {pedido.productos.map((p, i) => <li key={i}>{p.nombre} - Cant: {p.cantidad}</li>)}
+                                {pedido.productos.map((p, i) => (
+                                    <li key={i}>{p.nombre} - Cant: {p.cantidad}</li>
+                                ))}
                             </ul>
                         </div>
+
                         <div className="pedido-actions">
                             {pedido.estado === 'despachado' && (
-                                <button onClick={() => handleMarcarRecibido(pedido.id)} className="action-btn recibido">
+                                <button
+                                    onClick={() => handleMarcarRecibido(pedido.id)}
+                                    className="action-btn recibido"
+                                >
                                     Marcar como Recibido
                                 </button>
                             )}

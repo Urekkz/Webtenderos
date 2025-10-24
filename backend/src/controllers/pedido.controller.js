@@ -2,8 +2,7 @@
 
 import pool from '../models/db.js';
 
-// src/controllers/pedido.controller.js
-
+// --------------------------- CREAR PEDIDO ---------------------------
 export const crearPedido = async (req, res) => {
     const { tendero_id, productos } = req.body;
 
@@ -17,24 +16,20 @@ export const crearPedido = async (req, res) => {
         connection = await pool.getConnection();
         await connection.beginTransaction();
 
-        // --- NUEVA LÓGICA DE VALIDACIÓN ---
-        // 1. Revisamos si el tendero ya tiene un pedido activo.
-        // Un pedido activo es cualquiera que no esté 'recibido' o 'cancelado' (si tuviéramos ese estado).
+        // --- VALIDACIÓN: un pedido activo por tendero ---
         const [pedidosActivos] = await connection.query(
             "SELECT id FROM pedidos WHERE tendero_id = ? AND estado <> 'recibido'",
             [tendero_id]
         );
 
-        // 2. Si se encuentra al menos un pedido activo, devolvemos un error.
         if (pedidosActivos.length > 0) {
-            // El código de estado 409 Conflict es apropiado aquí.
-            return res.status(409).json({ message: 'Ya tienes un pedido activo. No puedes crear uno nuevo hasta que el anterior sea completado.' });
+            return res.status(409).json({
+                message: 'Ya tienes un pedido activo. No puedes crear uno nuevo hasta que el anterior sea completado.'
+            });
         }
-        // --- FIN DE LA NUEVA LÓGICA ---
 
-
-        // 3. Si no hay pedidos activos, procedemos a crear el nuevo como antes.
-        const pedidoQuery = 'INSERT INTO pedidos (tendero_id, estado) VALUES (?, ?)';
+        // --- CREAR NUEVO PEDIDO ---
+        const pedidoQuery = 'INSERT INTO pedidos (tendero_id, estado, fecha_creacion) VALUES (?, ?, NOW())';
         const [pedidoResult] = await connection.query(pedidoQuery, [tendero_id, 'pendiente']);
         const nuevoPedidoId = pedidoResult.insertId;
 
@@ -55,11 +50,9 @@ export const crearPedido = async (req, res) => {
 };
 
 
-
-// Nueva función para obtener todos los pedidos
+// --------------------------- OBTENER TODOS LOS PEDIDOS ---------------------------
 export const obtenerTodosLosPedidos = async (req, res) => {
     try {
-        // Esta consulta compleja une 4 tablas para obtener toda la información que necesitamos.
         const query = `
             SELECT 
                 p.id AS pedido_id,
@@ -77,12 +70,6 @@ export const obtenerTodosLosPedidos = async (req, res) => {
         `;
 
         const [rows] = await pool.query(query);
-
-        // El resultado de la consulta es "plano", es decir, repite la información del pedido por cada producto.
-        // Ejemplo:
-        // { pedido_id: 1, tendero_nombre: 'Don Pepe', producto_nombre: 'Arroz', cantidad: 10 }
-        // { pedido_id: 1, tendero_nombre: 'Don Pepe', producto_nombre: 'Panela', cantidad: 20 }
-        // Necesitamos agruparlos para que sea más fácil de manejar en el frontend.
 
         const pedidosAgrupados = {};
 
@@ -103,9 +90,25 @@ export const obtenerTodosLosPedidos = async (req, res) => {
             });
         });
 
-        // Convertimos el objeto de pedidos agrupados en un array
-        const resultadoFinal = Object.values(pedidosAgrupados);
+        // --- LÓGICA DE 72 HORAS ---
+        const ahora = new Date();
 
+        for (const pedido of Object.values(pedidosAgrupados)) {
+            const fechaCreacion = new Date(pedido.fecha);
+            const horasTranscurridas = (ahora - fechaCreacion) / (1000 * 60 * 60);
+
+            if (pedido.estado === 'pendiente' && horasTranscurridas > 72) {
+                pedido.estado = 'vencido';
+                try {
+                    await pool.query('UPDATE pedidos SET estado = ? WHERE id = ?', ['vencido', pedido.id]);
+                } catch (updateErr) {
+                    console.error(`Error actualizando estado del pedido ${pedido.id}:`, updateErr);
+                }
+            }
+        }
+        // --- FIN LÓGICA 72 HORAS ---
+
+        const resultadoFinal = Object.values(pedidosAgrupados);
         res.status(200).json(resultadoFinal);
 
     } catch (error) {
@@ -114,12 +117,12 @@ export const obtenerTodosLosPedidos = async (req, res) => {
     }
 };
 
-// Nueva función para obtener pedidos por tendero
+
+// --------------------------- OBTENER PEDIDOS POR TENDERO ---------------------------
 export const obtenerPedidosPorTendero = async (req, res) => {
     const { tenderoId } = req.params;
 
     try {
-        // La consulta es casi idéntica a la de obtenerTodosLosPedidos, pero con un WHERE
         const query = `
             SELECT 
                 p.id AS pedido_id, p.fecha_creacion, p.estado,
@@ -132,7 +135,6 @@ export const obtenerPedidosPorTendero = async (req, res) => {
         `;
         const [rows] = await pool.query(query, [tenderoId]);
 
-        // Reutilizamos la misma lógica de agrupación que ya creamos
         const pedidosAgrupados = {};
         rows.forEach(row => {
             if (!pedidosAgrupados[row.pedido_id]) {
@@ -157,10 +159,10 @@ export const obtenerPedidosPorTendero = async (req, res) => {
     }
 };
 
+
+// --------------------------- PRODUCTOS CONSOLIDADOS ---------------------------
 export const obtenerProductosConsolidados = async (req, res) => {
     try {
-        // Esta consulta suma las cantidades de cada producto
-        // agrupándolas por producto, solo para pedidos 'en_consolidacion'.
         const query = `
             SELECT
                 pr.id AS producto_id,
@@ -180,18 +182,18 @@ export const obtenerProductosConsolidados = async (req, res) => {
     }
 };
 
-// Función para actualizar el estado de MÚLTIPLES pedidos a la vez
+
+// --------------------------- ACTUALIZAR ESTADO POR LOTE ---------------------------
 export const actualizarEstadoLote = async (req, res) => {
     const { nuevoEstado, estadoAnterior } = req.body;
     if (!nuevoEstado || !estadoAnterior) {
         return res.status(400).json({ message: 'Se requiere un estado anterior y uno nuevo.' });
     }
     try {
-        // Actualizamos todos los pedidos que estaban en el estado anterior
         const query = 'UPDATE pedidos SET estado = ? WHERE estado = ?';
         const [result] = await pool.query(query, [nuevoEstado, estadoAnterior]);
 
-        res.status(200).json({ 
+        res.status(200).json({
             message: `Se actualizaron ${result.affectedRows} pedidos a ${nuevoEstado}.`
         });
     } catch (error) {
@@ -200,14 +202,12 @@ export const actualizarEstadoLote = async (req, res) => {
     }
 };
 
-// Nueva función para actualizar el estado de un pedido
+
+// --------------------------- ACTUALIZAR ESTADO INDIVIDUAL ---------------------------
 export const actualizarEstadoPedido = async (req, res) => {
-    // Obtenemos el ID del pedido de los parámetros de la URL (ej: /api/pedidos/5/estado)
-    const { id } = req.params; 
-    // Obtenemos el nuevo estado del cuerpo de la petición
+    const { id } = req.params;
     const { estado } = req.body;
 
-    // Validación básica
     if (!estado) {
         return res.status(400).json({ message: 'El nuevo estado es obligatorio.' });
     }
@@ -216,8 +216,6 @@ export const actualizarEstadoPedido = async (req, res) => {
         const query = 'UPDATE pedidos SET estado = ? WHERE id = ?';
         const [result] = await pool.query(query, [estado, id]);
 
-        // Verificamos si la consulta realmente afectó alguna fila.
-        // Si result.affectedRows es 0, significa que no se encontró un pedido con ese ID.
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Pedido no encontrado.' });
         }
@@ -229,7 +227,3 @@ export const actualizarEstadoPedido = async (req, res) => {
         res.status(500).json({ message: 'Error en el servidor al actualizar el estado.' });
     }
 };
-
-
-
-

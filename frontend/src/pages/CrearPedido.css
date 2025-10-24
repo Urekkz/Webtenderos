@@ -1,53 +1,201 @@
-/* src/pages/CrearPedido.css */
-
-.crear-pedido-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* ===========================
+   src/pages/CrearPedido.css
+   (versión modo oscuro + fondo)
+   =========================== */
+body {
+  background: url("../assets/Market.jpg") no-repeat center center fixed;
+  background-size: cover;
 }
 
+.crear-pedido-container {
+  max-width: 850px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: rgba(30, 41, 59, 0.85); /* gris oscuro translúcido */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  font-family: "Inter", sans-serif;
+  color: #e5e7eb;
+  backdrop-filter: blur(6px);
+}
+
+/* ===========================
+   TÍTULO
+   =========================== */
+h2 {
+  text-align: center;
+  color: #93c5fd; /* azul claro */
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* ===========================
+   INFO DEL TENDERO
+   =========================== */
+.info-tendero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+/* ===========================
+   TABLA DE PRODUCTOS
+   =========================== */
 .productos-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
 }
 
 .productos-table th,
 .productos-table td {
-    padding: 0.8rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #475569; /* gris intermedio */
 }
 
 .productos-table th {
-    background-color: #f4f4f9;
+  background-color: #1e293b;
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.productos-table tr:hover {
+  background-color: rgba(59, 130, 246, 0.15);
 }
 
 .cantidad-input {
-    width: 80px;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    text-align: center;
+  width: 70px;
+  padding: 0.5rem;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1rem;
+  color: #f1f5f9;
+  background-color: rgba(15, 23, 42, 0.7);
+  transition: all 0.2s ease;
 }
 
-/* Reutilizamos el estilo del botón de registro */
+.cantidad-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  outline: none;
+}
+
+/* ===========================
+   BOTÓN PRINCIPAL
+   =========================== */
 .submit-btn {
-    width: 100%;
-    padding: 0.8rem;
-    border: none;
-    background-color: #1a237e;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  background-color: #2563eb;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .submit-btn:hover {
-    background-color: #283593;
+  background-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  background-color: #475569;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   TEMPORIZADOR
+   =========================== */
+.temporizador {
+  display: inline-block;
+  padding: 0.7rem 1.2rem;
+  background-color: rgba(16, 185, 129, 0.15);
+  border-left: 5px solid #10b981;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.temporizador.urgente {
+  background-color: rgba(251, 191, 36, 0.15);
+  border-left-color: #facc15;
+  color: #facc15;
+  animation: parpadeo 1s infinite alternate;
+}
+
+.temporizador.vencido {
+  background-color: rgba(239, 68, 68, 0.15);
+  border-left-color: #ef4444;
+  color: #ef4444;
+}
+
+/* Animación de parpadeo para pedidos urgentes */
+@keyframes parpadeo {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ===========================
+   ALERTA DE PEDIDO ACTIVO
+   =========================== */
+.pedido-activo-alerta {
+  background-color: rgba(30, 58, 138, 0.25);
+  border-left: 6px solid #3b82f6;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #bfdbfe;
+}
+
+.pedido-activo-alerta h3 {
+  margin-top: 0;
+  color: #93c5fd;
+}
+
+.pedido-activo-alerta p {
+  margin: 0.3rem 0;
+  font-weight: 500;
+}
+
+/* ===========================
+   INFO DE TIEMPO Y MENSAJES
+   =========================== */
+.info-tiempo {
+  background: rgba(59, 130, 246, 0.15);
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  color: #93c5fd;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 600px) {
+  .crear-pedido-container {
+    padding: 1rem;
+  }
+
+  .productos-table th,
+  .productos-table td {
+    padding: 0.6rem;
+  }
+
+  .cantidad-input {
+    width: 60px;
+  }
+
+  .submit-btn {
+    font-size: 1rem;
+  }
 }

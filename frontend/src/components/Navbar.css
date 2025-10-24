@@ -1,38 +1,75 @@
-/* src/components/Navbar.css */
-
+/* ======== NAVBAR PRINCIPAL ======== */
 .navbar {
-    background-color: #1a237e; /* Azul oscuro */
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000000; /* azul institucional */
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-family: "Inter", sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .navbar-logo a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  transition: color 0.2s ease;
+}
+
+.navbar-logo a:hover {
+  color: #e0e7ff; /* azul claro */
 }
 
 .navbar-links {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 1.5rem;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar-links a {
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-    padding-bottom: 5px;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.3s ease;
+  color: #e0e7ff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+  padding-bottom: 2px;
 }
 
 .navbar-links a:hover {
-    border-color: #ffab40; /* Un color de acento */
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .navbar-links a {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(1, 248, 248, 0.1);
+  }
+
+  .navbar-links a:hover {
+    border-bottom: 1px solid #ffffff;
+  }
 }

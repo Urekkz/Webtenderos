@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import "./CrearPedido.css"; // Estilos para esta página
+import './styles.css'; // Estilos globales
+
 
 const CrearPedido = () => {
   const [productos, setProductos] = useState([]); // Para almacenar la lista de productos de la API

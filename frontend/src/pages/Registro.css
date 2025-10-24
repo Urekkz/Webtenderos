@@ -1,46 +1,103 @@
-/* src/pages/Registro.css */
-
+/* ======== CONTENEDOR PRINCIPAL ======== */
 .registro-container {
-    max-width: 500px;
-    margin: 2rem auto;
+    max-width: 480px;
+    margin: 4rem auto;
     padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: rgba(30, 41, 59, 0.85); /* gris oscuro semitransparente */
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    font-family: "Inter", sans-serif;
+    color: #e5e7eb; /* texto claro */
+    backdrop-filter: blur(5px);
 }
 
+/* ======== TÍTULO ======== */
+.registro-container h1 {
+    text-align: center;
+    color: #93c5fd; /* azul claro */
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.8rem;
+    letter-spacing: -0.5px;
+}
+
+/* ======== FORMULARIO ======== */
 .registro-form .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .registro-form label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #555;
+    font-weight: 600;
+    color: #cbd5e1; /* gris claro */
 }
 
+/* ======== CAMPOS ======== */
 .registro-form input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Importante para que el padding no afecte el ancho total */
+    border: 1px solid #334155; /* gris más oscuro */
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #f1f5f9;
+    background-color: rgba(15, 23, 42, 0.7);
+    box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
+.registro-form input:focus {
+    border-color: #3b82f6; /* azul */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    outline: none;
+}
+
+/* ======== BOTÓN ENVIAR ======== */
 .submit-btn {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.9rem;
     border: none;
-    background-color: #1a237e;
-    color: white;
+    background-color: #f1f1f1;
+    color: #f9fafb;
     font-size: 1rem;
-    font-weight: bold;
-    border-radius: 4px;
+    font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .submit-btn:hover {
-    background-color: #283593;
+    background-color: #3b82f6;
+    transform: translateY(-2px);
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* ======== MENSAJE O ALERTA ======== */
+.form-message {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.form-message.success {
+    color: #22c55e; /* verde éxito */
+}
+
+.form-message.error {
+    color: #ef4444; /* rojo error */
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 600px) {
+    .registro-container {
+        margin: 2rem 1rem;
+        padding: 1.5rem;
+    }
+
+    .registro-container h1 {
+        font-size: 1.5rem;
+    }
 }

@@ -1,0 +1,132 @@
+/* ===============================
+   🎨 Estilos Globales del Proyecto
+   =============================== */
+
+/* Importar fuente */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: "Inter", sans-serif;
+  color: #e5e7eb;
+  background-color: #0f172a;
+  overflow-x: hidden;
+}
+
+/* ===============================
+   🌆 Fondo global con imagen
+   =============================== */
+body {
+    background: url("../assets/Market.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+}
+
+/* Capa de oscurecimiento para legibilidad */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.88); /* Capa oscura */
+  backdrop-filter: blur(6px);
+  z-index: -1;
+}
+
+/* ===============================
+   📏 Tipografía y colores base
+   =============================== */
+h1, h2, h3, h4, h5 {
+  color: #93c5fd; /* Azul claro */
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+p, span, label, li {
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+
+a {
+  color: #60a5fa;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #93c5fd;
+}
+
+/* ===============================
+   🧭 Elementos comunes
+   =============================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Botones globales */
+button {
+  font-family: inherit;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Botón blanco elegante */
+.btn-white {
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  color: #0f172a;
+  font-weight: 600;
+  padding: 0.8rem 1.6rem;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.btn-white:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.3);
+}
+
+/* Botón azul */
+.btn-blue {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.8rem 1.6rem;
+}
+
+.btn-blue:hover {
+  background: #3b82f6;
+}
+
+/* ===============================
+   📱 Responsive
+   =============================== */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .container {
+    padding: 0.8rem;
+  }
+}

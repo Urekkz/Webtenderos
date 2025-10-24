@@ -27,4 +27,5 @@ router.post('/actualizar-lote', actualizarEstadoLote);
 // PATCH /api/pedidos/:id - para actualizar un pedido (en este caso, su estado)
 router.patch('/:id', actualizarEstadoPedido); // <-- NUEVA LÍNEA
 
+
 export default router;

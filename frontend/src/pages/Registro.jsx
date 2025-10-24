@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import './Registro.css'; // Crearemos este archivo para los estilos
+import './styles.css'; // Estilos globales
+
 
 const Registro = () => {
     // Usamos el hook useState para crear un estado para nuestro formulario.
